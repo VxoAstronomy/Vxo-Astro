@@ -24,9 +24,9 @@ export default function StockBadge({ product, className = '', dotOnly = false })
   }
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[9px] font-medium uppercase tracking-[0.16em] backdrop-blur-md ${toneClass[info.tone]} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[8px] font-medium uppercase tracking-[0.14em] backdrop-blur-md sm:gap-1.5 sm:px-2.5 sm:py-1 sm:text-[9px] sm:tracking-[0.16em] ${toneClass[info.tone]} ${className}`}
     >
-      <span className={`h-1.5 w-1.5 rounded-full ${dotClass[info.tone]}`} />
+      <span className={`h-1 w-1 rounded-full sm:h-1.5 sm:w-1.5 ${dotClass[info.tone]}`} />
       {info.label}
     </span>
   );
