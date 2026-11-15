@@ -1,0 +1,6 @@
+{
+  // dist/ là sản phẩm build (CSS Tailwind đã nén): 2 lớp hint dưới đây chỉ là nhiễu
+  // khi lint file sinh tự động, không phải lỗi code nguồn.
+  "css.lint.vendorPrefix": "ignore",
+  "css.lint.propertyIgnoredDueToDisplay": "ignore"
+}
