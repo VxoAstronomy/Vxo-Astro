@@ -11,11 +11,6 @@ window.CONFIG = {
       'Gương cầu/para, kính phản xạ DIY và hệ thống goto, tracking OnStep — chế tác thủ công, dễ dàng hơn với người bắt đầu.',
   },
 
-  /* Webhook Discord — nơi nhận đơn hàng & yêu cầu chế tạo (kênh QUẢN LÝ ĐƠN HÀNG).
-     Lấy link: Discord → Cài đặt kênh → Tích hợp → Webhook → Sao chép URL.
-     Lưu ý: ai có link này đều gửi được vào kênh — đừng chia sẻ công khai. */
-  DISCORD_WEBHOOK: 'https://discord.com/api/webhooks/1571477583806337096/Y72yKL3EwEPNoy9B209O0noo5XLXlckjzP0aak88C_Fecw1NeYtNRGc7fonlDMlfvmhh',
-
   /* Link CSV của tab "SanPham".
      Khuyến nghị: https://docs.google.com/spreadsheets/d/ID_SHEET/gviz/tq?tqx=out:csv&sheet=SanPham
      Để trống = dùng dữ liệu mẫu trong src/lib/data.js */
