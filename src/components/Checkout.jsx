@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { copyText, isPhone, money } from '../lib/format';
 import { useLockBody } from '../lib/hooks';
-import { CONFIG, HAS_GAS, ZALO } from '../lib/storeConfig';
+import { CONFIG, HAS_DISCORD, ZALO } from '../lib/storeConfig';
+import { sendOrder } from '../lib/discord';
 import { useShop } from '../Store';
 import { IconChat, IconCheck, IconChevronDown, IconClose, IconCopy, IconPhone } from './Icons';
 import PhoneLinks from './PhoneLinks';
@@ -102,26 +103,21 @@ export default function Checkout() {
   const submit = async (event) => {
     event.preventDefault();
     if (!cartItems.length || !validate()) return;
-    if (!HAS_GAS) {
-      setErrors({ submit: 'Chưa kết nối Google Apps Script. Hãy gửi đơn qua Zalo hoặc cấu hình GAS_URL trong config.js.' });
+    if (!HAS_DISCORD) {
+      setErrors({ submit: 'Chưa cấu hình Discord webhook. Hãy gửi đơn qua Zalo hoặc dán DISCORD_WEBHOOK trong config.js.' });
       return;
     }
     const order = buildOrder();
     setLoading(true);
     setErrors({});
     try {
-      await fetch(CONFIG.GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(order),
-      });
+      await sendOrder(order);
       clearCart();
       setCheckoutOpen(false);
       setDone(order);
       setForm(EMPTY());
     } catch {
-      setErrors({ submit: 'Không gửi được đơn. Kiểm tra kết nối mạng rồi thử lại, hoặc đặt qua Zalo.' });
+      setErrors({ submit: 'Không gửi được đơn tới Discord. Kiểm tra kết nối mạng rồi thử lại, hoặc đặt qua Zalo.' });
     } finally {
       setLoading(false);
     }
@@ -298,7 +294,7 @@ export default function Checkout() {
             </p>
           )}
 
-          {HAS_GAS ? (
+          {HAS_DISCORD ? (
             <>
               <button type="submit" disabled={loading} className="btn-primary w-full shine">
                 {loading ? 'Đang gửi đơn…' : <>Xác nhận đặt hàng · {money(total)}</>}
@@ -313,7 +309,7 @@ export default function Checkout() {
                 <IconChat className="h-4 w-4" /> Gửi đơn qua Zalo · {money(total)}
               </button>
               <p className="text-center text-[10.5px] leading-relaxed text-zinc-600">
-                Website chưa kết nối Google Apps Script. Đơn sẽ được sao chép và gửi qua Zalo.
+                Website chưa kết nối Discord. Đơn sẽ được sao chép và gửi qua Zalo.
               </p>
             </>
           )}

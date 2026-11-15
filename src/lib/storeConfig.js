@@ -6,7 +6,7 @@ const DEFAULT_CONFIG = {
     intro:
       'Kính phản xạ DIY và hệ thống goto, tracking OnStep — chế tác thủ công, giúp dễ dàng hơn trong việc vươn tới vì sao.',
   },
-  GAS_URL: 'https://script.google.com/macros/s/AKfycbwCUMoQjZRmofSdBPKZp9p2dqaTgZV6zGYvwqKjOFydsEvBSri8B3dL77dVKBJCBnA/exec',
+  DISCORD_WEBHOOK: 'https://discord.com/api/webhooks/1571477583806337096/Y72yKL3EwEPNoy9B209O0noo5XLXlckjzP0aak88C_Fecw1NeYtNRGc7fonlDMlfvmhh',
   SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/1E1nS4srdBKXDNHPTIqxclX_JFNK66G5pR4PpsgckH7w/gviz/tq?tqx=out:csv&sheet=SanPham',
   DEPOSIT_RATE: 0.3,
   BANK: { name: 'MB Bank', number: '0832321798', owner: 'Nguyen Bao Vinh' },
@@ -76,10 +76,9 @@ export const ZALO = {
   link: CONFIG.ZALO.link || `https://zalo.me/${zaloPhone}`,
 };
 
-export const HAS_GAS =
-  typeof CONFIG.GAS_URL === 'string' &&
-  CONFIG.GAS_URL.startsWith('https://script.google.com/') &&
-  !CONFIG.GAS_URL.includes('YOUR_DEPLOYMENT_ID');
+export const HAS_DISCORD =
+  typeof CONFIG.DISCORD_WEBHOOK === 'string' &&
+  CONFIG.DISCORD_WEBHOOK.startsWith('https://discord.com/api/webhooks/');
 
 export const HAS_SHEET = Boolean(String(CONFIG.SHEET_CSV_URL || '').trim());
 

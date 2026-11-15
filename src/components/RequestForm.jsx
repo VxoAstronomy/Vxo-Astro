@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { copyText, isPhone } from '../lib/format';
-import { CONFIG, HAS_GAS, ZALO } from '../lib/storeConfig';
+import { CONFIG, HAS_DISCORD, ZALO } from '../lib/storeConfig';
+import { sendRequest } from '../lib/discord';
 import { useShop } from '../Store';
 import { IconArrowRight, IconChat, IconCheck } from './Icons';
 
@@ -52,7 +53,7 @@ export default function RequestForm() {
     if (form.website) return;
     if (!validate()) return;
 
-    if (!HAS_GAS) {
+    if (!HAS_DISCORD) {
       await viaZalo();
       return;
     }
@@ -71,17 +72,12 @@ export default function RequestForm() {
 
     setLoading(true);
     try {
-      await fetch(CONFIG.GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(payload),
-      });
-      setSent({ id: requestId, via: 'gas' });
+      await sendRequest(payload);
+      setSent({ id: requestId, via: 'discord' });
       setForm(EMPTY());
       setErrors({});
     } catch {
-      setErrors({ submit: 'Không gửi được yêu cầu. Thử lại hoặc nhắn Zalo để shop hỗ trợ.' });
+      setErrors({ submit: 'Không gửi được yêu cầu tới Discord. Thử lại hoặc nhắn Zalo để shop hỗ trợ.' });
     } finally {
       setLoading(false);
     }
@@ -94,10 +90,10 @@ export default function RequestForm() {
           <IconCheck className="h-7 w-7" />
         </div>
         <h2 className="mt-6 text-2xl font-extralight tracking-tight text-white">
-          {sent.via === 'gas' ? 'Đã nhận yêu cầu' : 'Yêu cầu đã sẵn sàng gửi'}
+          {sent.via === 'discord' ? 'Đã nhận yêu cầu' : 'Yêu cầu đã sẵn sàng gửi'}
         </h2>
         <p className="mx-auto mt-3 max-w-sm text-[12.5px] leading-relaxed text-zinc-500">
-          {sent.via === 'gas'
+          {sent.via === 'discord'
             ? `Mã yêu cầu ${sent.id}. Shop sẽ phản hồi trong 24 giờ qua số điện thoại hoặc Zalo bạn cung cấp.`
             : 'Nội dung yêu cầu đã được sao chép. Dán vào cuộc trò chuyện Zalo vừa mở để shop nhận thông tin.'}
         </p>
@@ -186,7 +182,7 @@ export default function RequestForm() {
       )}
 
       <div className="mt-7 space-y-3">
-        {HAS_GAS ? (
+        {HAS_DISCORD ? (
           <button type="submit" disabled={loading} className="btn-primary w-full shine">
             {loading ? 'Đang gửi…' : <>Gửi yêu cầu <IconArrowRight className="h-4 w-4" /></>}
           </button>

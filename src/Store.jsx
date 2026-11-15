@@ -1,6 +1,6 @@
 /* "Kho chung" của cả web (React Context).
    Luồng dữ liệu: public/config.js → link CSV Google Sheet → parseProducts()
-   → danh sách sản phẩm → giỏ hàng (lưu localStorage) → đơn gửi Apps Script.
+   → danh sách sản phẩm → giỏ hàng (lưu localStorage) → đơn gửi Discord.
    Muốn đổi chữ/số/link: sửa config.js. Muốn đổi sản phẩm: sửa Google Sheet. */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { CONFIG, HAS_SHEET, ZALO } from './lib/storeConfig';
