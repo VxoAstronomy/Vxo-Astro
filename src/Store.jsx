@@ -17,6 +17,46 @@ import {
 const CART_KEY = 'vxo_cart_v2';
 const PRODUCTS_KEY = 'vxo_products_v2';
 
+/* Mạng chập chờn (4G/Wi-Fi yếu): thử lại một lần trước khi chịu thua. */
+const fetchCsv = async (url, signal) => {
+  try {
+    return await fetch(url, { cache: 'no-store', signal });
+  } catch (error) {
+    if (signal.aborted) throw error;
+    await new Promise((resolve) => setTimeout(resolve, 1200));
+    return fetch(url, { cache: 'no-store', signal });
+  }
+};
+
+/* Mở web bằng cách nhấp đúp index.html (file://) thì Google chặn CORS.
+   JSONP đi bằng thẻ <script> nên không bị chặn: đổi CSV thành JSON bọc trong callback. */
+const tableToCsv = (table) => {
+  const quote = (value) => `"${String(value ?? '').replace(/"/g, '""')}"`;
+  const lines = [(table.cols || []).map((col) => quote(col.label)).join(',')];
+  for (const row of table.rows || []) {
+    lines.push((row.c || []).map((cell) => quote(cell && cell.v)).join(','));
+  }
+  return lines.join('\n');
+};
+
+const fetchCsvJsonp = (baseUrl) =>
+  new Promise((resolve, reject) => {
+    const cb = `vxoSheet${Date.now()}`;
+    const script = document.createElement('script');
+    const done = (error, text) => {
+      window.clearTimeout(timer);
+      delete window[cb];
+      script.remove();
+      if (error) reject(error);
+      else resolve(text);
+    };
+    const timer = window.setTimeout(() => done(new Error('JSONP timeout')), 15000);
+    window[cb] = (data) => done(null, tableToCsv(data.table));
+    script.onerror = () => done(new Error('JSONP error'));
+    script.src = `${baseUrl.replace('tqx=out:csv', `tqx=out:json;responseHandler:${cb}`)}&_cb=${Date.now()}`;
+    document.head.appendChild(script);
+  });
+
 const ShopContext = createContext(null);
 
 const readCart = () => {
@@ -75,9 +115,21 @@ export function ShopProvider({ children }) {
       try {
         const base = CONFIG.SHEET_CSV_URL;
         const url = `${base}${base.includes('?') ? '&' : '?'}_cb=${Date.now()}`;
-        const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const list = parseProducts(await res.text());
+        const viaJsonp = window.location.protocol === 'file:';
+        let text;
+        try {
+          if (viaJsonp) {
+            text = await fetchCsvJsonp(base);
+          } else {
+            const res = await fetchCsv(url, controller.signal);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            text = await res.text();
+          }
+        } catch (error) {
+          if (controller.signal.aborted || viaJsonp) throw error;
+          text = await fetchCsvJsonp(base);
+        }
+        const list = parseProducts(text);
         if (!list.length) throw new Error('Sheet trống hoặc sai tên cột');
         if (!alive) return;
         setProducts(list);

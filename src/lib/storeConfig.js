@@ -6,7 +6,7 @@ const DEFAULT_CONFIG = {
     intro:
       'Kính phản xạ DIY và hệ thống goto, tracking OnStep — chế tác thủ công, giúp dễ dàng hơn trong việc vươn tới vì sao.',
   },
-  GAS_URL: 'https://script.google.com/macros/s/AKfycbxewpeQrMTUWVmvmC1WeCo2aC7hxrrfR3mCXogeWrPo1U4YO3lVyLfK3Nh_IxsZg30y/exec',
+  GAS_URL: 'https://script.google.com/macros/s/AKfycbwCUMoQjZRmofSdBPKZp9p2dqaTgZV6zGYvwqKjOFydsEvBSri8B3dL77dVKBJCBnA/exec',
   SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/1E1nS4srdBKXDNHPTIqxclX_JFNK66G5pR4PpsgckH7w/gviz/tq?tqx=out:csv&sheet=SanPham',
   DEPOSIT_RATE: 0.3,
   BANK: { name: 'MB Bank', number: '0832321798', owner: 'Nguyen Bao Vinh' },
@@ -58,13 +58,22 @@ function merge(base, override) {
 const raw = typeof window !== 'undefined' && window.CONFIG ? window.CONFIG : {};
 export const CONFIG = merge(DEFAULT_CONFIG, raw);
 
-const zaloPhone = String(CONFIG.ZALO.phone || '').replace(/[^\d]/g, '');
+/* Một ô cấu hình có thể chứa nhiều số: "0368783039 - 0832321798" → tách thành 2 số. */
+const parsePhones = (value) =>
+  String(value || '')
+    .split(/\s*[-–,;/]\s*/)
+    .map((part) => part.replace(/\D/g, ''))
+    .filter((part) => part.length >= 8);
+
+export const PHONES = parsePhones(CONFIG.CONTACT.phone)
+  .concat(parsePhones(CONFIG.ZALO.phone))
+  .filter((phone, index, list) => list.indexOf(phone) === index);
+
+const zaloPhone = parsePhones(CONFIG.ZALO.phone)[0] || PHONES[0] || '';
 export const ZALO = {
   ...CONFIG.ZALO,
   phone: zaloPhone || CONFIG.ZALO.phone,
-  link: CONFIG.ZALO.link && !CONFIG.ZALO.link.includes('036873039')
-    ? CONFIG.ZALO.link
-    : `https://zalo.me/${zaloPhone}`,
+  link: CONFIG.ZALO.link || `https://zalo.me/${zaloPhone}`,
 };
 
 export const HAS_GAS =

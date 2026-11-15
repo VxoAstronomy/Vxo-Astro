@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CONFIG, asset } from '../lib/storeConfig';
 import { useShop } from '../Store';
 import { IconArrowRight, IconChat, IconSparkle } from './Icons';
+import PhoneLinks from './PhoneLinks';
 import Reveal from './Reveal';
 
 const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
@@ -434,9 +435,9 @@ export default function Hero() {
                 </span>
                 Đang nhận đơn
               </span>
-              <a href={`tel:${zalo.phone}`} className="transition-colors hover:text-zinc-200">
-                Hotline {zalo.phone}
-              </a>
+              <span className="flex items-center gap-2">
+                Hotline <PhoneLinks className="text-zinc-300" />
+              </span>
               <span>{zalo.hours}</span>
             </div>
           </Reveal>

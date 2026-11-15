@@ -1,5 +1,5 @@
 /* Đọc bảng sản phẩm từ CSV của Google Sheet thành object cho web.
-   Cột tiếng Việt không dấu (ten, gia, tuy_chon…) → xem GOOGLE-SHEET-GUIDE.md.
+   Cột tiếng Việt không dấu (ten, gia, tuy_chon…) → xem MAU-SAN-PHAM.csv ở thư mục gốc.
    File này chỉ đọc & tính giá, không gọi mạng — dễ test, dễ sửa. */
 import { toNumber } from './format';
 

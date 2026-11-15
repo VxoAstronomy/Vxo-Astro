@@ -3,6 +3,7 @@ import { CONFIG, ZALO } from '../lib/storeConfig';
 import { useShop } from '../Store';
 import Accordion from '../components/Accordion';
 import PageHeader from '../components/PageHeader';
+import PhoneLinks from '../components/PhoneLinks';
 import Reveal from '../components/Reveal';
 import { IconChat, IconClock, IconCopy, IconMail, IconPhone, IconPin, IconShield, IconTruck } from '../components/Icons';
 
@@ -30,11 +31,19 @@ const FAQ = [
 ];
 
 const INFO = [
-  { Icon: IconPin, title: 'Khu vực', text: CONFIG.CONTACT.area },
-  { Icon: IconClock, title: 'Giờ hỗ trợ', text: ZALO.hours },
-  { Icon: IconTruck, title: 'Vận chuyển', text: 'Toàn quốc · kiểm tra hàng trước khi thanh toán' },
-  { Icon: IconShield, title: 'Bảo hành', text: 'Hỗ trợ kỹ thuật và căn chỉnh sau bán' },
+  { Icon: IconPin, title: 'Khu vực', text: CONFIG.CONTACT.area, tone: 'sky' },
+  { Icon: IconClock, title: 'Giờ hỗ trợ', text: ZALO.hours, tone: 'violet' },
+  { Icon: IconTruck, title: 'Vận chuyển', text: 'Toàn quốc · kiểm tra hàng trước khi thanh toán', tone: 'emerald' },
+  { Icon: IconShield, title: 'Bảo hành', text: 'Hỗ trợ kỹ thuật và căn chỉnh sau bán', tone: 'amber' },
 ];
+
+/* Mỗi thẻ một tầng màu nhạt riêng để khối thông tin không bị trùng một màu phẳng. */
+const TONES = {
+  sky: { card: 'from-sky-400/[0.07]', icon: 'border-sky-400/25 bg-sky-400/10 text-sky-300' },
+  violet: { card: 'from-accent-violet/[0.09]', icon: 'border-accent-violet/30 bg-accent-violet/10 text-accent-soft' },
+  emerald: { card: 'from-emerald-400/[0.06]', icon: 'border-emerald-400/25 bg-emerald-400/10 text-emerald-300' },
+  amber: { card: 'from-amber-400/[0.06]', icon: 'border-amber-400/25 bg-amber-400/10 text-amber-200' },
+};
 
 export default function Contact() {
   const { notify, openConsult } = useShop();
@@ -87,6 +96,10 @@ export default function Contact() {
 
                 <div className="mt-6 space-y-3 border-t border-white/[0.08] pt-5 text-[11.5px] text-zinc-500">
                   <p className="flex items-center gap-2.5">
+                    <IconPhone className="h-4 w-4 text-accent/70" />
+                    <PhoneLinks className="text-zinc-200" />
+                  </p>
+                  <p className="flex items-center gap-2.5">
                     <IconClock className="h-4 w-4 text-accent/70" /> {ZALO.hours}
                   </p>
                   <p className="flex items-center gap-2.5">
@@ -121,9 +134,13 @@ export default function Contact() {
 
           <div className="lg:col-span-7">
             <div className="grid gap-4 sm:grid-cols-2">
-              {INFO.map(({ Icon, title, text }, index) => (
-                <Reveal key={title} delay={index * 70} className="rounded-[24px] border border-white/[0.07] bg-white/[0.02] p-5">
-                  <span className="grid h-10 w-10 place-items-center rounded-full border border-white/10 text-zinc-400">
+              {INFO.map(({ Icon, title, text, tone }, index) => (
+                <Reveal
+                  key={title}
+                  delay={index * 70}
+                  className={`rounded-[24px] border border-white/[0.08] bg-gradient-to-b ${TONES[tone].card} to-transparent p-5`}
+                >
+                  <span className={`grid h-10 w-10 place-items-center rounded-full border ${TONES[tone].icon}`}>
                     <Icon className="h-4 w-4" />
                   </span>
                   <p className="mt-4 text-[10px] uppercase tracking-[0.22em] text-zinc-500">{title}</p>
@@ -132,7 +149,7 @@ export default function Contact() {
               ))}
             </div>
 
-            <Reveal delay={200} className="mt-4 rounded-[24px] border border-white/[0.07] bg-white/[0.02] p-5 sm:p-6">
+            <Reveal delay={200} className="mt-4 rounded-[24px] border border-white/10 bg-gradient-to-br from-accent/[0.09] via-white/[0.02] to-transparent p-5 sm:p-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
                   <p className="text-[10px] uppercase tracking-[0.22em] text-zinc-500">Thông tin chuyển khoản</p>

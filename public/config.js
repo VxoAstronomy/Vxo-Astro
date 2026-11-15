@@ -12,7 +12,7 @@ window.CONFIG = {
   },
 
   /* URL Web App của Google Apps Script — nhận đơn hàng và yêu cầu chế tạo */
-  GAS_URL: 'https://script.google.com/macros/s/AKfycbxewpeQrMTUWVmvmC1WeCo2aC7hxrrfR3mCXogeWrPo1U4YO3lVyLfK3Nh_IxsZg30y/exec',
+  GAS_URL: 'https://script.google.com/macros/s/AKfycbwCUMoQjZRmofSdBPKZp9p2dqaTgZV6zGYvwqKjOFydsEvBSri8B3dL77dVKBJCBnA/exec',
 
   /* Link CSV của tab "SanPham".
      Khuyến nghị: https://docs.google.com/spreadsheets/d/ID_SHEET/gviz/tq?tqx=out:csv&sheet=SanPham

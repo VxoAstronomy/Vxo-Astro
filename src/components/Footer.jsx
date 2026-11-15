@@ -1,5 +1,6 @@
 import { CONFIG, ZALO } from '../lib/storeConfig';
 import Logo from './Logo';
+import PhoneLinks from './PhoneLinks';
 import { IconArrowUpRight, IconClock, IconFacebook, IconInstagram, IconMail, IconPhone, IconPin, IconYoutube } from './Icons';
 
 const YEAR = new Date().getFullYear();
@@ -13,7 +14,8 @@ export default function Footer() {
   ].filter((s) => s.href);
 
   return (
-    <footer className="relative z-10 mt-24 border-t border-white/[0.07] bg-ink-950/60">
+    <footer className="relative z-10 mt-24 bg-ink-950/60">
+      <div className="h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" aria-hidden="true" />
       <div className="container-x pb-10 pt-16 sm:pt-20">
         <div className="grid gap-12 md:grid-cols-12">
           <div className="md:col-span-5">
@@ -70,9 +72,7 @@ export default function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <IconPhone className="mt-0.5 h-4 w-4 shrink-0 text-accent/70" />
-                <a href={`tel:${ZALO.phone}`} className="transition-colors hover:text-white">
-                  {ZALO.phone}
-                </a>
+                <PhoneLinks className="text-zinc-200" />
               </li>
               {CONTACT.email && (
                 <li className="flex items-start gap-3">
@@ -90,7 +90,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col items-start justify-between gap-3 border-t border-white/[0.06] pt-6 text-[11px] text-zinc-600 sm:flex-row sm:items-center">
+        <div className="mt-14 h-px bg-gradient-to-r from-transparent via-white/[0.12] to-transparent" aria-hidden="true" />
+        <div className="flex flex-col items-start justify-between gap-3 pt-6 text-[11px] text-zinc-600 sm:flex-row sm:items-center">
           <p>
             © {YEAR} {BRAND.name} {BRAND.suffix}. Chế tác cho người quan sát bầu trời.
           </p>

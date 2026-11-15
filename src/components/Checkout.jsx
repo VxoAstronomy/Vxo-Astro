@@ -4,6 +4,7 @@ import { useLockBody } from '../lib/hooks';
 import { CONFIG, HAS_GAS, ZALO } from '../lib/storeConfig';
 import { useShop } from '../Store';
 import { IconChat, IconCheck, IconChevronDown, IconClose, IconCopy, IconPhone } from './Icons';
+import PhoneLinks from './PhoneLinks';
 
 const EMPTY = () => ({ name: '', phone: '', address: '', note: '', method: 'cod', txn: '' });
 
@@ -317,8 +318,8 @@ export default function Checkout() {
             </>
           )}
 
-          <p className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-[0.16em] text-zinc-600">
-            <IconPhone className="h-3 w-3" /> Hỗ trợ {ZALO.phone} · {ZALO.hours}
+          <p className="flex flex-wrap items-center justify-center gap-2 text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+            <IconPhone className="h-3 w-3" /> Hỗ trợ <PhoneLinks className="text-zinc-400" /> · {ZALO.hours}
           </p>
         </form>
 
